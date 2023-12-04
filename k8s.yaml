@@ -60,6 +60,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  name: mysql
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: loadbalancer
 spec:
   type: LoadBalancer
