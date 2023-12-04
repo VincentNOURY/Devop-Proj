@@ -1,16 +1,37 @@
 apiVersion: v1
-kind: Service
+kind: PersistentVolume
 metadata:
-  name: loadbalancer
+  name: mysql-pv
 spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 8000
-  selector:
-    app: webserver
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local
+  local:
+    path: /mnt/mysql
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - node-name
 ---
-apiVersion: apps/v1
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  storageClassName: local
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1GiapiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
@@ -26,20 +47,30 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: mysql
+        image: mysql:5.6
+        volumeMounts:
+        - name: mysql-storage
+          mountPath: /var/lib/mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: root
         ports:
         - containerPort: 3306
-        volumeMounts:
-        - name: mysql-persistent-storage
-          mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: mysql-storage
         persistentVolumeClaim:
           claimName: mysql-pv-claim
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: webserver
 ---
 apiVersion: apps/v1
 kind: Deployment
