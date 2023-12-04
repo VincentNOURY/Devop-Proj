@@ -1,21 +1,24 @@
+
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@mysql/users'
-db = SQLAlchemy(app)
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+# MySQL configurations
+app.config['MYSQL_HOST'] = 'mysql'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_DB'] = 'users'
 
-    def __repr__(self):
-        return '<User %r>' % self.username
+mysql = MySQL(app)
 
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def index():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM users")
+    data = cur.fetchall()
+    cur.close()
+    return str(data)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
