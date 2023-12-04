@@ -71,7 +71,7 @@ spec:
   type: LoadBalancer
   ports:
   - port: 80
-    targetPort: 8000
+    targetPort: 80
   selector:
     app: webserver
 ---
@@ -94,4 +94,4 @@ spec:
         image: docker.io/library/webserver
         imagePullPolicy: Never
         ports:
-        - containerPort: 8000
+        - containerPort: 80
