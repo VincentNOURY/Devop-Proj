@@ -13,19 +13,19 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: database
+  name: mysql
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: database
+      app: mysql
   template:
     metadata:
       labels:
-        app: database
+        app: mysql
     spec:
       containers:
-      - name: db-container
+      - name: mysql
         image: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
