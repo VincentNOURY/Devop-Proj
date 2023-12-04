@@ -67,7 +67,7 @@ metadata:
   name: my-subdomain
 spec:
   selector:
-    name: my-test
+    name: mysql
   clusterIP: None
 ---
 apiVersion: v1
