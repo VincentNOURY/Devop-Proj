@@ -47,7 +47,6 @@ spec:
     spec:
       containers:
       - name: web-container
-        imagePullPolicy: Never
         image: webserver
         ports:
         - containerPort: 8000
