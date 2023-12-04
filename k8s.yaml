@@ -30,6 +30,11 @@ spec:
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: root
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: db-storage
+          mountPath: /var/lib/mysql
 ---
 apiVersion: apps/v1
 kind: Deployment
