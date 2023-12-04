@@ -1,41 +1,24 @@
-from django.db import models
-from django.http import HttpResponse
-from django.views import View
-from django.conf import settings
-from django.core.wsgi import get_wsgi_application
+from flask import Flask
+import mysql.connector
 
-settings.configure(
-    DATABASES={
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'users',
-            'USER': 'root',
-            'PASSWORD': 'root',
-            'HOST': 'mysql',
-            'PORT': '3306',
-        }
-    },
-    ROOT_URLCONF=__name__,
-)
+app = Flask(__name__)
 
-class User(models.Model):
-    username = models.CharField(max_length=80, unique=True)
-    email = models.EmailField(unique=True)
+@app.route('/')
+def hello_world():
+        cnx = mysql.connector.connect(user='root', password='root',
+                                                                    host='mysql',
+                                                                    database='users')
+        cursor = cnx.cursor()
+        query = ("SELECT username, email FROM users")
+        cursor.execute(query)
 
-    def __str__(self):
-        return self.username
+        for (username, email) in cursor:
+            print("{}: {}".format(username, email))
 
-class HelloWorldView(View):
-    def get(self, request):
-        return HttpResponse('Hello, World!')
+        cursor.close()
+        cnx.close()
 
-urlpatterns = [
-    path('', HelloWorldView.as_view()),
-]
+        return 'Hello, World!'
 
-application = get_wsgi_application()
-
-if __name__ == "__main__":
-    from django.core.management import execute_from_command_line
-
-    execute_from_command_line([__file__, 'runserver'])
+if __name__ == '__main__':
+        app.run(debug=True)
