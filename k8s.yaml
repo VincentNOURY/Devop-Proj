@@ -40,9 +40,9 @@ spec:
       labels:
         app: mysql
     spec:
+      hostname: mysql
       containers:
         - image: mysql:8.0
-          hostname: mysql
           name: mysql
           env:
             - name: MYSQL_ROOT_PASSWORD
