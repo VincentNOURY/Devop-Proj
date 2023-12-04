@@ -42,6 +42,7 @@ spec:
         app: mysql
     spec:
       hostname: mysql
+      subdomain: my-subdomain
       containers:
         - image: mysql:8.0
           name: mysql
@@ -58,6 +59,15 @@ spec:
      #   - name: mysql-persistent-storage
      #     persistentVolumeClaim:
      #       claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-subdomain
+spec:
+  selector:
+    name: my-test
+  clusterIP: None
 ---
 apiVersion: v1
 kind: Service
