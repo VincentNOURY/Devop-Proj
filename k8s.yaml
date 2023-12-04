@@ -29,7 +29,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
-  namespace: default
 spec:
   selector:
     matchLabels:
@@ -42,7 +41,6 @@ spec:
         app: mysql
     spec:
       hostname: mysql
-      subdomain: my-subdomain
       setHostnameAsFQDN: true
       containers:
         - image: mysql:8.0
@@ -64,15 +62,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-subdomain
-spec:
-  selector:
-    name: mysql
-  clusterIP: None
----
-apiVersion: v1
-kind: Service
-metadata:
   name: loadbalancer
 spec:
   type: LoadBalancer
@@ -86,7 +75,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: webserver
-  namespace: default
 spec:
   replicas: 2
   selector:
