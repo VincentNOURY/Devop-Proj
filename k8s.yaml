@@ -52,10 +52,10 @@ spec:
           volumeMounts:
             - name: mysql-persistent-storage
               mountPath: /var/lib/mysql
-      volumes:
-        - name: mysql-persistent-storage
-          persistentVolumeClaim:
-            claimName: mysql-pv-claim
+     # volumes:
+     #   - name: mysql-persistent-storage
+     #     persistentVolumeClaim:
+     #       claimName: mysql-pv-claim
 ---
 apiVersion: v1
 kind: Service
