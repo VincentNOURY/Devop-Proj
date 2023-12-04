@@ -47,6 +47,6 @@ spec:
     spec:
       containers:
       - name: web-container
-        image: webserver
+        image: docker.io/library/webserver
         ports:
         - containerPort: 8000
