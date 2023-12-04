@@ -57,20 +57,20 @@ spec:
           persistentVolumeClaim:
             claimName: mysql-pv-claim
 ---
-apiVersion: v1
+piVersion: v1
 kind: Service
 metadata:
-  name: loadbalancer
-  labels:
-    app: mydeployment
+  name: ingress
+  namespace: ingress
 spec:
+  selector:
+    name: ingress-microk8s
   type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: 5000
-    nodePort: 30001
-  selector:
-    app: mydeployment
+    - name: http
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
 ---
 apiVersion: apps/v1
 kind: Deployment
