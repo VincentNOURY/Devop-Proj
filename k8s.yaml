@@ -26,6 +26,9 @@ spec:
       containers:
       - name: db-container
         image: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
 ---
 apiVersion: apps/v1
 kind: Deployment
