@@ -43,6 +43,7 @@ spec:
     spec:
       hostname: mysql
       subdomain: my-subdomain
+      setHostnameAsFQDN: true
       containers:
         - image: mysql:8.0
           name: mysql
