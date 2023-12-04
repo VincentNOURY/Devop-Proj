@@ -48,5 +48,6 @@ spec:
       containers:
       - name: web-container
         image: docker.io/library/webserver
+        imagePullPolicy: Never
         ports:
         - containerPort: 8000
