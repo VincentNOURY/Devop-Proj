@@ -55,7 +55,6 @@ spec:
       containers:
       - name: webserver
         image: 192.168.0.78:8081/library/webserver:latest
-        imagePullPolicy: Never
         ports:
         - containerPort: 5000
           name: webserver
