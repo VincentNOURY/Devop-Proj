@@ -61,9 +61,10 @@ spec:
     spec:
       containers:
       - name: webserver
-        image: nginx:1.14.2
+        image: webserver
+        imagePullPolicy: Never
         ports:
-        - containerPort: 80
+        - containerPort: 5000
           name: webserver
         volumeMounts:
         - name: webserver-persistent-storage
