@@ -10,6 +10,15 @@ def hello_world():
                                                                     host=os.environ['MYSQL_HOST'],
                                                                     database='users')
         cursor = cnx.cursor()
+        cursor.execute("CREATE TABLE IF NOT EXISTS users (username VARCHAR(255), email VARCHAR(255))")
+        #make 20 users
+        for i in range(20):
+                add_user = ("INSERT INTO users "
+                                "(username, email) "
+                                "VALUES (%s, %s)")
+                data_user = ('user' + str(i), 'user' + str(i) + '@example.com')
+                cursor.execute(add_user, data_user)       
+        
         query = ("SELECT username, email FROM users")
         cursor.execute(query)
 
