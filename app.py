@@ -19,9 +19,7 @@ def hello_world():
                 data_user = ('user' + str(i), 'user' + str(i) + '@example.com')
                 cursor.execute(add_user, data_user)       
         
-        query = ("SELECT username, email FROM users")
-        cursor.execute(query)
-
+        cursor.execute("SELECT username, email FROM users")
         for (username, email) in cursor:
             print("{}: {}".format(username, email))
 
