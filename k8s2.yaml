@@ -84,5 +84,6 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: webserver
-          servicePort: 5000
+          service:
+            name: webserver
+            port: 5000
