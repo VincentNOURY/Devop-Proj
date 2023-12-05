@@ -44,14 +44,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: database
+      appdb: mysql
   strategy:
     type: Recreate
   replicas: 1
   template:
     metadata:
       labels:
-        app: database
+        appdb: mysql
     spec:
       containers:
       - name: mysql
@@ -75,7 +75,7 @@ spec:
   - port: 3306
     targetPort: 3306
   selector:
-    app: database
+    appdb: mysql
 ---
 apiVersion: v1
 kind: Service
