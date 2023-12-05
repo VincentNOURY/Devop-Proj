@@ -73,15 +73,16 @@ spec:
   selector:
     app: webserver
 ---
-apiVersion: v1
-kind: Service
+# make an ingress load balancer
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
 metadata:
-  name: loadbalancer
+  name: webserver
 spec:
-  type: LoadBalancer
-  loadBalancerIP: 192.168.0.100
-  ports:
-  - port: 80
-    targetPort: 5000
-  selector:
-    app: webserver
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: webserver
+          servicePort: 5000
