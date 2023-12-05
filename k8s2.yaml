@@ -51,7 +51,7 @@ spec:
   template:
     metadata:
       labels:
-        appdb: mysql
+        app: database
     spec:
       containers:
       - name: mysql
@@ -75,7 +75,7 @@ spec:
   - port: 3306
     targetPort: 3306
   selector:
-    appdb: mysql
+    app: database
 ---
 apiVersion: v1
 kind: Service
