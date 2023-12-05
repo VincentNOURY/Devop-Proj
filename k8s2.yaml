@@ -87,16 +87,4 @@ spec:
     targetPort: 5000
   selector:
     app: webserver
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: loadbalancer
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 5000
-  selector:
-    app: webserver
 
