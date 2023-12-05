@@ -11,7 +11,7 @@ def hello_world():
                                                                     database='users')
         cursor = cnx.cursor()
         cursor.execute("CREATE TABLE IF NOT EXISTS users (username VARCHAR(255), email VARCHAR(255))")
-        #make 20 users
+        
         for i in range(20):
                 add_user = ("INSERT INTO users "
                                 "(username, email) "
@@ -19,11 +19,12 @@ def hello_world():
                 data_user = ('user' + str(i), 'user' + str(i) + '@example.com')
                 cursor.execute(add_user, data_user)       
         
-        cursor("SELECT username, email FROM users")
-        
+        cnx.commit()
 
+        query = ("SELECT username, email FROM users")
+        cursor.execute(query)
         for (username, email) in cursor:
-            print("{}: {}".format(username, email))
+                print("{} has email {}".format(username, email))
 
         cursor.close()
         cnx.close()
