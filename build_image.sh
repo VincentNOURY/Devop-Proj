@@ -4,7 +4,7 @@ docker build -t $IP:8081/library/webserver .
 docker push $IP:8081/library/webserver:latest
 # vérifie si le dossier harbor existe
 if [ ! -d "harbor" ]; then
-    curl https://github.com/goharbor/harbor/releases/download/v2.10.0-rc1/harbor-offline-installer-v2.10.0-rc1.tgz
+    wget https://github.com/goharbor/harbor/releases/download/v2.10.0-rc1/harbor-offline-installer-v2.10.0-rc1.tgz
     tar xvf harbor-offline-installer-v2.10.0-rc1.tgz
     rm harbor-offline-installer-v2.10.0-rc1.tgz
     bash harbor/prepare
