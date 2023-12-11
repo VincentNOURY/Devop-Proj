@@ -7,6 +7,7 @@ if [ ! -d "harbor" ]; then
     wget https://github.com/goharbor/harbor/releases/download/v2.10.0-rc1/harbor-offline-installer-v2.10.0-rc1.tgz
     tar xvf harbor-offline-installer-v2.10.0-rc1.tgz
     rm harbor-offline-installer-v2.10.0-rc1.tgz
+    mv harbor.yml harbor/
     bash harbor/prepare
     bash harbor/install.sh --with-notary --with-clair --with-chartmuseum
 fi
