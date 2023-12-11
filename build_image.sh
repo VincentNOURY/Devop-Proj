@@ -3,10 +3,10 @@ export IP="$(ip addr show ens32  | awk '$1 == "inet" { print $2 }' | cut -d/ -f1
 # vérifie si le dossier harbor existe
 if [ ! -d "harbor" ]; then
     if [ ! -f "harbor-offline-installer-v2.10.0-rc1.tgz" ]; then
-        wget "https://github.com/goharbor/harbor/releases/download/v2.7.3/harbor-offline-installer-v2.7.3.tgz"
+        wget "https://storage.googleapis.com/harbor-releases/release-1.9.0/harbor-offline-installer-v1.9.0.tgz"
     fi
-    tar -xzvf harbor-offline-installer-v2.10.0-rc1.tgz
-    # rm harbor-offline-installer-v2.10.0-rc1.tgz
+    tar -xzvf harbor-offline-installer-v1.9.0.tgz
+    rm harbor-offline-installer-v1.9.0.tgz
     cp ./harbor.yml harbor/harbor.yml && echo 'moved'
     bash harbor/install.sh
 fi
@@ -16,9 +16,10 @@ fi
 # sudo microk8s stop && sudo microk8s start
 docker compose -f harbor/docker-compose.yml up -d
 
-#docker login $IP:8081
+docker login $IP:8081 -u admin -p Harbor12345
 docker build -t $IP:8081/library/webserver .
 docker push $IP:8081/library/webserver:latest
 
+microk8s enable metallb:192.168.1.100-192.168.1.110
 microk8s kubectl delete -f k8s.yaml
 microk8s kubectl apply -f k8s.yaml
