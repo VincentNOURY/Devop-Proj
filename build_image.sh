@@ -1,5 +1,5 @@
 #!/bin/bash
-export IP="$(ip addr show enp0s3  | awk '$1 == "inet" { print $2 }' | cut -d/ -f1)"
+export IP="$(ip addr show ens160  | awk '$1 == "inet" { print $2 }' | cut -d/ -f1)"
 docker build -t $IP:8081/library/webserver .
 docker push $IP:8081/library/webserver:latest
 # sudo mkdir -p /var/snap/microk8s/current/args/certs.d/$IP:8081
