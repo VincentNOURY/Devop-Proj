@@ -17,9 +17,9 @@ fi
 # sudo microk8s stop && sudo microk8s start
 sudo docker-compose -f harbor/docker-compose.yml up -d
 
-docker login $IP:8081 -u admin -p Harbor12345
-docker build -t $IP:8081/library/webserver .
-docker push $IP:8081/library/webserver:latest
+sudo docker login $IP:8081 -u admin -p Harbor12345
+sudo docker build -t $IP:8081/library/webserver .
+sudo docker push $IP:8081/library/webserver:latest
 
 microk8s enable metallb:192.168.1.100-192.168.1.110
 microk8s kubectl delete -f k8s.yaml
