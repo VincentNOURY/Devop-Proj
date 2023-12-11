@@ -7,8 +7,7 @@ if [ ! -d "harbor" ]; then
     wget https://github.com/goharbor/harbor/releases/download/v2.10.0-rc1/harbor-offline-installer-v2.10.0-rc1.tgz
     tar xvf harbor-offline-installer-v2.10.0-rc1.tgz
     rm harbor-offline-installer-v2.10.0-rc1.tgz
-    cp harbor.yml harbor/
-    bash harbor/prepare
+    cp harbor.yml harbor/harbor.yml
     bash harbor/install.sh --with-notary --with-clair --with-chartmuseum
 fi
 # sudo mkdir -p /var/snap/microk8s/current/args/certs.d/$IP:8081
