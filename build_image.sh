@@ -8,7 +8,7 @@ if [ ! -d "harbor" ]; then
         # rm harbor-offline-installer-v2.10.0-rc1.tgz
     fi
     cp ./harbor.yml harbor/harbor.yml && echo 'moved'
-    bash harbor/install.sh
+    bash harbor/install.sh --with-notary --with-clair --with-chartmuseum
 fi
 # sudo mkdir -p /var/snap/microk8s/current/args/certs.d/$IP:8081
 # sudo touch /var/snap/microk8s/current/args/certs.d/$IP:8081/hosts.toml
