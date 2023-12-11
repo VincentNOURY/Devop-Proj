@@ -8,8 +8,8 @@ if [ ! -d "harbor" ]; then
     fi
     sudo tar -xzvf $file
     rm $file
-    cp ./harbor.yml harbor/harbor.yml && echo 'moved'
-    bash harbor/install.sh
+    sudo cp ./harbor.yml harbor/harbor.yml && echo 'moved'
+    sudo bash harbor/install.sh
 fi
 # sudo mkdir -p /var/snap/microk8s/current/args/certs.d/$IP:8081
 # sudo touch /var/snap/microk8s/current/args/certs.d/$IP:8081/hosts.toml
