@@ -12,7 +12,7 @@ fi
 # sudo touch /var/snap/microk8s/current/args/certs.d/$IP:8081/hosts.toml
 # echo "server = \"http://$IP:8081\" \n[host.\"http://$IP:8081\"]\ncapabilities = [\"pull\", \"resolve\"]" | tee /var/snap/microk8s/current/args/certs.d/$IP:8081/hosts.toml
 # sudo microk8s stop && sudo microk8s start
-sudo docker-compose up -f harbor/docker-compose.yml -d
+docker-compose up -f harbor/docker-compose.yml -d
 docker login $IP:8081
 docker build -t $IP:8081/library/webserver .
 docker push $IP:8081/library/webserver:latest
