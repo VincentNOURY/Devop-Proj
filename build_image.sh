@@ -3,12 +3,12 @@ export IP="$(ip addr show ens32  | awk '$1 == "inet" { print $2 }' | cut -d/ -f1
 # vérifie si le dossier harbor existe
 if [ ! -d "harbor" ]; then
     if [ ! -f "harbor-offline-installer-v2.10.0-rc1.tgz" ]; then
-        wget "https://github.com/goharbor/harbor/releases/download/v2.10.0-rc1/harbor-offline-installer-v2.10.0-rc1.tgz"
+        wget "https://github.com/goharbor/harbor/releases/download/v2.7.3/harbor-offline-installer-v2.7.3.tgz"
     fi
     tar -xzvf harbor-offline-installer-v2.10.0-rc1.tgz
     # rm harbor-offline-installer-v2.10.0-rc1.tgz
     cp ./harbor.yml harbor/harbor.yml && echo 'moved'
-    bash harbor/install.sh --with-notary --with-clair --with-chartmuseum
+    bash harbor/install.sh
 fi
 # sudo mkdir -p /var/snap/microk8s/current/args/certs.d/$IP:8081
 # sudo touch /var/snap/microk8s/current/args/certs.d/$IP:8081/hosts.toml
