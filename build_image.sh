@@ -7,13 +7,13 @@ if [ ! -d "harbor" ]; then
     wget https://github.com/goharbor/harbor/releases/download/v2.10.0-rc1/harbor-offline-installer-v2.10.0-rc1.tgz
     tar xvf harbor-offline-installer-v2.10.0-rc1.tgz
     rm harbor-offline-installer-v2.10.0-rc1.tgz
-    cp harbor.yml harbor/harbor.yml
-    bash harbor/install.sh --with-notary --with-clair --with-chartmuseum
+    cp ./harbor.yml harbor/harbor.yml && echo 'moved'
+    bash harbor/install.sh
 fi
 # sudo mkdir -p /var/snap/microk8s/current/args/certs.d/$IP:8081
 # sudo touch /var/snap/microk8s/current/args/certs.d/$IP:8081/hosts.toml
 # echo "server = \"http://$IP:8081\" \n[host.\"http://$IP:8081\"]\ncapabilities = [\"pull\", \"resolve\"]" | tee /var/snap/microk8s/current/args/certs.d/$IP:8081/hosts.toml
 # sudo microk8s stop && sudo microk8s start
-# sudo docker-compose up -f harbor/docker-compose.yml -d
+sudo docker-compose up -f harbor/docker-compose.yml -d
 microk8s kubectl delete -f k8s.yaml
 microk8s kubectl apply -f k8s.yaml
