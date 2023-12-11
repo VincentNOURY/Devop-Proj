@@ -1,12 +1,13 @@
 #!/bin/bash
+file=harbor-offline-installer-v1.9.0.tgz
 export IP="$(ip addr show ens32  | awk '$1 == "inet" { print $2 }' | cut -d/ -f1)"
 # vérifie si le dossier harbor existe
 if [ ! -d "harbor" ]; then
-    if [ ! -f "harbor-offline-installer-v2.10.0-rc1.tgz" ]; then
-        wget "https://storage.googleapis.com/harbor-releases/release-1.9.0/harbor-offline-installer-v1.9.0.tgz"
+    if [ ! -f $file ]; then
+        wget "https://storage.googleapis.com/harbor-releases/release-1.9.0/$file"
     fi
-    tar -xzvf harbor-offline-installer-v1.9.0.tgz
-    rm harbor-offline-installer-v1.9.0.tgz
+    sudo tar -xzvf $file
+    rm $file
     cp ./harbor.yml harbor/harbor.yml && echo 'moved'
     bash harbor/install.sh
 fi
