@@ -2,6 +2,14 @@
 export IP="$(ip addr show ens160  | awk '$1 == "inet" { print $2 }' | cut -d/ -f1)"
 docker build -t $IP:8081/library/webserver .
 docker push $IP:8081/library/webserver:latest
+# vérifie si le dossier harbor existe
+if [ ! -d "harbor" ]; then
+    curl -O https://github.com/goharbor/harbor/releases/download/v2.10.0-rc1/harbor-offline-installer-v2.10.0-rc1.tgz
+    tar xvf harbor-offline-installer-v2.10.0-rc1.tgz
+    rm harbor-offline-installer-v2.10.0-rc1.tgz
+    bash harbor/prepare
+    bash harbor/install.sh --with-notary --with-clair --with-chartmuseum
+fi
 # sudo mkdir -p /var/snap/microk8s/current/args/certs.d/$IP:8081
 # sudo touch /var/snap/microk8s/current/args/certs.d/$IP:8081/hosts.toml
 # echo "server = \"http://$IP:8081\" \n[host.\"http://$IP:8081\"]\ncapabilities = [\"pull\", \"resolve\"]" | tee /var/snap/microk8s/current/args/certs.d/$IP:8081/hosts.toml
