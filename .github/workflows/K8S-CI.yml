@@ -6,7 +6,8 @@ on:
 env:
   DOCKER_IMAGE_NAME: webapp
   IMG_K8S: ghcr.io/${{ github.repository_owner }}/webapp:${{ github.sha }}
-  IP_K8S: 192.168.0.0/24
+  IP_K8S_RANGE: 10.0.0.0/24
+  IP_K8S: 10.0.0.1
 
 jobs:
   build:
@@ -42,6 +43,7 @@ jobs:
       - run: |
           kubectl cluster-info
           kubectl get nodes
+
       - name : Preparing cluster for webapp
       
         run: |
@@ -50,7 +52,7 @@ jobs:
                 --for=condition=ready pod \
                 --selector=app=metallb \
                 --timeout=90s
-          kubectl apply -f ./k8s.yaml
+          envsubst < k8s.yaml | kubectl apply -f -
           sleep 20
       - run: |
           curl -i http://localhost:8000/
