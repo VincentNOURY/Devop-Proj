@@ -2,8 +2,8 @@
 file=harbor-offline-installer-v1.9.0.tgz
 export IP="$(ip -br a | grep ens | cut -d ' ' -f 1 | xargs ip addr show | awk '$1 == "inet" { print $2 }' | cut -d/ -f1)"
 export IMG_K8S="192.168.0.19:8081/library/webserver:latest"
-export IP_K8S_RANGE="192.168.0.102/32"
-export IP_K8S="\"192.168.0.102\""
+export IP_K8S_RANGE="192.168.0.100/30"
+export IP_K8S="\"192.168.0.100\""
 
 envsubst < k8s.yaml > tmp.yaml
 
