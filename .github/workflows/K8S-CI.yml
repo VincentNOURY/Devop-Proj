@@ -4,11 +4,7 @@ on:
   push:
 
 env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
-  DOCKER_IMAGE_NAME: kube-ez
-  DOCKERFILE_PATH: ./Dockerfile
-  IMG_K8S: ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+  IMG_K8S: ghcr.io/${{ github.repository_owner }}/kube-ez:${{ github.sha }}
   IP_K8S: 192.168.0.0/24
 
 jobs:
