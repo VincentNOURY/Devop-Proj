@@ -55,4 +55,4 @@ jobs:
           envsubst < k8s.yaml | kubectl apply -f -
           sleep 40
       - run: |
-          curl -i http://${{ env.IP_K8S }}:80
+          curl http://${{ env.IP_K8S }}
