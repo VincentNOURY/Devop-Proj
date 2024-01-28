@@ -50,7 +50,7 @@ jobs:
                 --for=condition=ready pod \
                 --selector=app=metallb \
                 --timeout=90s
-          kubectl apply -f ./k8s.yml
+          kubectl apply -f ./k8s.yaml
           sleep 20
       - run: |
           curl -i http://localhost:8000/
