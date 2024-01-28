@@ -11,6 +11,7 @@ jobs:
   Test-on-cluster:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
 
       - name: Testing on a k8s Kind Cluster
         uses: helm/kind-action@v1.4.0
@@ -26,7 +27,7 @@ jobs:
                 --for=condition=ready pod \
                 --selector=app=metallb \
                 --timeout=90s
-          kubectl apply -f k8s.yml
+          kubectl apply -f ./k8s.yml
           sleep 20
       - run: |
           curl -i http://localhost:8000/
