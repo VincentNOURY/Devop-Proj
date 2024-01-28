@@ -4,7 +4,7 @@ import os
 cnx = mysql.connector.connect(user='root', password='root',
                                 host="localhost",
                                 port=30000,
-                                database='users')
+                                database='employee_db')
 cursor = cnx.cursor()
 cursor.execute("CREATE TABLE IF NOT EXISTS users (username VARCHAR(255), email VARCHAR(255))")
 

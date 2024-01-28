@@ -1,6 +1,6 @@
 import os
 from flask import Flask
-from flaskext.mysql import MySQL
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
@@ -45,7 +45,7 @@ def read():
 @app.route('/form')
 def form():
     return """
-    <form action="/afd" method="POST">
+      <form action="/afd" method="POST">
       <label for="id">id:</label><br>
       <input type="text" id="id" name="id"><br>
       <label for="first_name">first_name:</label><br>
@@ -55,7 +55,7 @@ def form():
       <label for="hire_date">hire_date:</label><br>
       <input type="text" id="hire_date" name="hire_date"><br><br>
       <input type="submit" value="Submit">
-    </form> 
+    </form>
     """
 
 @app.route('/afd', methods=['POST'])
