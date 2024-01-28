@@ -4,7 +4,8 @@ on:
   push:
 
 env:
-  IMG_K8S: ghcr.io/${{ github.repository_owner }}/kube-ez:${{ github.sha }}
+  DOCKER_IMAGE_NAME: webapp
+  IMG_K8S: ghcr.io/${{ github.repository_owner }}/webapp:${{ github.sha }}
   IP_K8S: 192.168.0.0/24
 
 jobs:
@@ -41,7 +42,7 @@ jobs:
       - run: |
           kubectl cluster-info
           kubectl get nodes
-      - name : Preparing cluster for kube-ez
+      - name : Preparing cluster for webapp
       
         run: |
           kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
