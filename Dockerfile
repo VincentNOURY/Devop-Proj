@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY requirements.txt .
 
+RUN apt-get install -y python python-setuptools python-dev build-essential python-pip python-mysqldb
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
