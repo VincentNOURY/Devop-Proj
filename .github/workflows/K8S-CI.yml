@@ -1,0 +1,36 @@
+name: K8S Deployment
+run-name: K8S Deployment
+on:
+  push:
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  DOCKER_IMAGE_NAME: kube-ez
+  DOCKERFILE_PATH: ./Dockerfile
+  IMG_K8S: ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+  IP_K8S: 192.168.0.0/24
+
+jobs:
+  Test-on-cluster:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Testing on a k8s Kind Cluster
+        uses: helm/kind-action@v1.4.0
+        
+      - run: |
+          kubectl cluster-info
+          kubectl get nodes
+      - name : Preparing cluster for kube-ez
+      
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
+          kubectl wait --namespace metallb-system \
+                --for=condition=ready pod \
+                --selector=app=metallb \
+                --timeout=90s
+          kubectl apply -f k8s.yml
+          sleep 20
+      - run: |
+          curl -i http://localhost:8000/
