@@ -53,9 +53,6 @@ jobs:
                 --selector=app=metallb \
                 --timeout=90s
           envsubst < k8s.yaml | kubectl apply -f -
-          kubectl wait --namespace default \
-                --for=condition=ready pod \
-                --selector=app=webapp \
-                --timeout=90s
+          sleep 40
       - run: |
           curl -i http://${{ env.IP_K8S }}:80
