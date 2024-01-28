@@ -1,7 +1,12 @@
 #!/bin/bash
 file=harbor-offline-installer-v1.9.0.tgz
 export IP="$(ip -br a | grep ens | cut -d ' ' -f 1 | xargs ip addr show | awk '$1 == "inet" { print $2 }' | cut -d/ -f1)"
-echo $IP
+export IMG_K8S="192.168.0.19:8081/library/webserver:latest"
+export IP_K8S_RANGE="192.168.0.100/30"
+export IP_K8S="192.168.0.100"
+
+envsubst < k8s.yaml > tmp.yaml
+
 # vérifie si le dossier harbor existe
 if [ ! -d "harbor" ]; then
     if [ ! -f $file ]; then
@@ -26,9 +31,7 @@ sudo docker build -t $IP:8081/library/webserver .
 sudo docker login $IP:8081 -u admin -p Harbor12345
 sudo docker push $IP:8081/library/webserver:latest
 
-sed 's/192\.168\.0\.[0-9]\{1,3\}\:8081\/library\/webserver\:latest/'"$IP"'\:8081\/library\/webserver\:latest/g' -i k8s.yaml
-export IMG_K8S="192.168.0.19:8081/library/webserver:latest"
-export IP_K8S="192.168.0.100"
+sed 's/192\.168\.0\.[0-9]\{1,3\}\:8081\/library\/webserver\:latest/'"$IP"'\:8081\/library\/webserver\:latest/g' -i tmp.yaml
 microk8s enable metallb:192.168.1.100-192.168.1.110
-microk8s kubectl delete -f k8s.yaml
-microk8s kubectl apply -f k8s.yaml
+microk8s kubectl delete -f tmp.yaml
+microk8s kubectl apply -f tmp.yaml
