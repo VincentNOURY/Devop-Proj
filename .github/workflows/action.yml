@@ -1,9 +1,0 @@
-name: learn-github-actions
-run-name: Déploiement vers ${{ inputs.deploy_target }} par @${{ github.actor }}
-on: [push]
-jobs:
-  check-bats-version:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout du code source
-        uses: actions/checkout@v4
