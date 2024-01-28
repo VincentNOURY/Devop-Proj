@@ -5,7 +5,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - 192.168.0.100/30
+  - 192.168.0.102/32
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -74,7 +74,7 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           value: "root"
         - name: MYSQL_DATABASE
-          value: "users"
+          value: "employees"
 ---
 apiVersion: v1
 kind: Service
@@ -93,7 +93,7 @@ metadata:
   name: loadbalancer
 spec:
   type: LoadBalancer
-  loadBalancerIP:  192.168.0.100
+  loadBalancerIP:  "192.168.0.102"
   ports:
   - port: 80
     targetPort: 5000

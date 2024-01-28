@@ -1,36 +1,26 @@
 import os
-from flask import Flask
-from flask_mysqldb import MySQL
+from mysql.connector import (connection)
+from flask import Flask, request
 
 app = Flask(__name__)
 
-mysql = MySQL()
+cnx = connection.MySQLConnection(user='root', password='root',
+                                 host=os.environ['MYSQL_HOST'],
+                                 database='employees')
 
-mysql_database_host = 'MYSQL_HOST' in os.environ and os.environ['MYSQL_HOST'] or 'localhost'
-
-# MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
-app.config['MYSQL_DATABASE_DB'] = 'employee_db'
-app.config['MYSQL_DATABASE_HOST'] = mysql_database_host
-app.config['MYSQL_DATABASE_PORT'] = os.environ['MYSQL_PORT'] if 'MYSQL_PORT' in os.environ else 3306
-mysql.init_app(app)
-
-conn = mysql.connect()
-
-cursor = conn.cursor()
-
+cursor = cnx.cursor()
 cursor.execute("CREATE TABLE IF NOT EXISTS employees (emp_no INT, first_name VARCHAR(255), last_name VARCHAR(255), hire_date DATE)")
-cursor.execute("CREATE DATABASE IF NOT EXISTS employee_db")
-cursor.execute("USE employee_db")
+cursor.close()
+cnx.close()
 
 @app.route("/")
 def main():
-    return "Welcome!"
+  return "Welcome!"
 
 @app.route('/hay')
 def hello():
-    return 'I am good, how about you?'
+  return 'I am good, how about you?'
+
 
 @app.route('/lire')
 def read():
