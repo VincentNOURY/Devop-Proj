@@ -1,3 +1,18 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: metallb
+  namespace: metallb-system
+spec:
+  addresses:
+  - 192.168.0.100/30
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: empty
+  namespace: metallb-system
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -77,11 +92,11 @@ kind: Service
 metadata:
   name: loadbalancer
 spec:
-  type: LoadBalancer
+  selector:
+    app: webserver
+  loadBalancerIP: $IP_K8S
   ports:
   - port: 80
     targetPort: 5000
   externalTrafficPolicy: Local
-  selector:
-    app: webserver
-
+  type: LoadBalancer
