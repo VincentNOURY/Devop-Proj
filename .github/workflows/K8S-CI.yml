@@ -57,6 +57,7 @@ jobs:
           envsubst < k8s.yaml | kubectl apply -f -
           sleep 40
       - run: |
+          kubectl get pods -o wide
           export IP_LB="$(kubectl describe service loadbalance | grep IP: | awk '{print $2}' | cut -f 1- | tr -d '\n' | tr -d '[:space:]' | tr -d '\r')"
           echo $IP_LB
           curl -s $IP_LB
