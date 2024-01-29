@@ -2,6 +2,7 @@ name: K8S - CI
 run-name: K8S - CI
 on:
   push:
+  pull_request:
 
 env:
   DOCKER_IMAGE_NAME: webapp
@@ -55,4 +56,7 @@ jobs:
           envsubst < k8s.yaml | kubectl apply -f -
           sleep 40
       - run: |
+          ip route
+          kubectl get pods -o wide
+          kubectl get svc -o wide
           curl http://localhost
