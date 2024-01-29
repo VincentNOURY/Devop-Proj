@@ -1,0 +1,57 @@
+name: K8S - CI
+run-name: K8S - CI
+on:
+  push:
+  pull_request:
+
+env:
+  DOCKER_IMAGE_NAME: webapp
+  IMG_K8S: ghcr.io/${{ github.repository_owner }}/webapp:${{ github.sha }}
+  IP_K8S_RANGE: 10.1.0.0/16
+  IP_K8S: 10.1.0.241
+  DOCKERFILE_PATH: Dockerfile
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Login to Github Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ${{ env.DOCKERFILE_PATH }}
+        push: true
+        tags: |
+          ghcr.io/${{ github.repository_owner }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+
+  deploy-cluster:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Testing on a k8s Kind Cluster
+        uses: helm/kind-action@v1.8.0
+        
+      - run: |
+          kubectl cluster-info
+          kubectl get nodes
+
+      - name : Preparing cluster for webapp
+      
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
+          kubectl wait --namespace metallb-system \
+                --for=condition=ready pod \
+                --selector=app=metallb \
+                --timeout=90s
+          envsubst < k8s.yaml | kubectl apply -f -

@@ -1,75 +1,17 @@
-apiVersion: v1
-kind: PersistentVolume
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
 metadata:
-  name: mysql-pv
-  labels:
-    type: local
+  name: metallb
+  namespace: metallb-system
 spec:
-  storageClassName: manual
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/mnt/mysql"
+  addresses:
+  - $IP_K8S_RANGE
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
 metadata:
-  name: mysql-pv-claim
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mysql
-spec:
-  selector:
-    matchLabels:
-      app: mysql
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: mysql
-    spec:
-      hostname: mysql
-      setHostnameAsFQDN: true
-      containers:
-        - image: mysql:8.0
-          name: mysql
-          env:
-            - name: MYSQL_ROOT_PASSWORD
-              value: root
-          ports:
-            - containerPort: 3306
-              name: mysql
-          #volumeMounts:
-          #  - name: mysql-persistent-storage
-          #    mountPath: /var/lib/mysql
-     # volumes:
-     #   - name: mysql-persistent-storage
-     #     persistentVolumeClaim:
-     #       claimName: mysql-pv-claim
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: loadbalancer
-spec:
-  type: LoadBalancer
-  ports:
-  - port: 80
-    targetPort: 5000
-  selector:
-    app: webserver
+  name: empty
+  namespace: metallb-system
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -86,8 +28,75 @@ spec:
         app: webserver
     spec:
       containers:
-      - name: web-container
-        image: docker.io/library/webserver
-        imagePullPolicy: Never
+      - name: webserver
+        image: $IMG_K8S
         ports:
         - containerPort: 5000
+          name: webserver
+        env:
+        - name: MYSQL_HOST
+          value: mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  type: NodePort
+  ports:
+  - port: 3306
+    targetPort: 3306
+    nodePort: 30000
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "root"
+        - name: MYSQL_DATABASE
+          value: "employees"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver
+spec:
+  ports:
+  - port: 5000
+    targetPort: 5000
+  selector:
+    app: webserver
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadbalancer
+spec:
+  selector:
+    app: webserver
+  loadBalancerIP: $IP_K8S
+  externalTrafficPolicy: Local
+  ports:
+  - port: 80
+    targetPort: 5000
+  type: LoadBalancer
