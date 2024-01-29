@@ -95,6 +95,7 @@ spec:
   selector:
     app: webserver
   loadBalancerIP: $IP_K8S
+  externalTrafficPolicy: Local
   ports:
   - port: 80
     targetPort: 5000
