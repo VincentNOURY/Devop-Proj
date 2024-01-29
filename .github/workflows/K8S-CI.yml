@@ -60,7 +60,7 @@ jobs:
           kubectl get pods -o wide
           kubectl get svc -o wide
           kubectl describe service loadbalancer
-          kubectl describe service loadbalancer | grep IP: | awk '{print $2}' | cut -f 1 
+          kubectl describe service loadbalancer | grep IP: | awk '{print $2}' | cut -f 1 | awk '{print $1}'
           export IP_LB="$(kubectl describe service loadbalancer | grep IP: | awk '{print $2}' | cut -f 1- | tr -d '\n' | tr -d '[:space:]' | tr -d '\r')"
           echo $IP_LB
           curl -s $IP_LB
