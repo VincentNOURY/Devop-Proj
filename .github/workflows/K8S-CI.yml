@@ -57,5 +57,4 @@ jobs:
           envsubst < k8s.yaml | kubectl apply -f -
           sleep 40
       - run: |
-          echo http://"$(kubectl describe service loadbalancer | grep IP: | awk '{print $2}' | tr '\n' ' ' | awk '{print $1}')"
-          curl http://"$(kubectl describe service loadbalancer | grep IP: | awk '{print $2}' | tr '\n' ' ' | awk '{print $1}')"
+          curl http://loadbalancer
