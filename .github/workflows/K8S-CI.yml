@@ -59,4 +59,4 @@ jobs:
       - run: |
           export IP_LB="$(kubectl describe service loadbalancer | grep IP: | awk '{print $2}' | tr '\n' ' ' | awk '{print $1}')"
           echo $IP_LB
-          curl -s $IP_LB
+          curl http://$IP_LB
