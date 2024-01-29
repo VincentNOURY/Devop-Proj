@@ -60,3 +60,4 @@ jobs:
           kubectl get pods -o wide
           kubectl get svc -o wide
           curl http://localhost
+          curl http://${{ env.IP_K8S }}
