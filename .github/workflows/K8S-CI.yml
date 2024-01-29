@@ -57,7 +57,7 @@ jobs:
           envsubst < k8s.yaml | kubectl apply -f -
           sleep 40
       - run: |
-          microk8s kubectl describe  services loadbalancer
+          kubectl describe  services loadbalancer
           ip route
           kubectl get pods -o wide
           kubectl get svc -o wide
